@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="GhostProfile - Analiza tu exposición digital en redes sociales. Descubre tu perfil de usuario con análisis avanzado de patrones de consumo digital.">
+  <meta name="keywords" content="redes sociales, análisis digital, exposición, tiempo pantalla, perfil usuario">
+  <meta name="author" content="GhostProfile Team">
+  <title>GhostProfile – Análisis de Exposición Digital 2025</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="estilos.css">
+</head>
+<body>
+  <!-- Contenedor de partículas animadas (efecto de fondo) -->
+  <div id="particulas" aria-hidden="true"></div>
+  
+  <!-- Efecto glow central (decorativo) -->
+  <div class="glow-central" aria-hidden="true"></div>
+  
+  <!-- Encabezado de navegación principal -->
+  <header class="header" role="banner">
+    <div class="container header-inner">
+      <div class="logo">
+        <span aria-label="GhostProfile - Análisis de Exposición Digital">GhostProfile</span>
+      </div>
+      <nav role="navigation" aria-label="Navegación principal">
+        <a href="#seccion-form" class="nav-link">Analizar</a>
+        <a href="#seccion-perfiles" class="nav-link">Perfiles</a>
+        <a href="#seccion-info" class="nav-link">Info</a>
+      </nav>
+    </div>
+  </header>
+  
+  <!-- Contenido principal -->
+  <main role="main">
+    <!-- Sección Hero con presentación principal -->
+    <section class="hero" role="region" aria-label="Presentación de GhostProfile">
+      <div class="container hero-inner">
+        <h1 class="hero-title">GhostProfile</h1>
+        <p class="hero-edition">¿Cuánto tiempo dedicas a las redes sociales?</p>
+        <p class="hero-text">Analiza tu exposición digital y descubre tu perfil de usuario en redes sociales con tecnología de análisis avanzado.</p>
+      </div>
+      <div class="waves-wrap" aria-hidden="true">
+        <svg viewBox="0 0 1440 320" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <filter id="glow"><feGaussianBlur stdDeviation="2" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+            <pattern id="grid" width="24" height="24" patternUnits="userSpaceOnUse">
+              <path d="M24 0L0 0 0 24" fill="none" stroke="rgba(20,184,166,0.04)" stroke-width="0.5"/>
+            </pattern>
+          </defs>
+          <rect width="100%" height="100%" fill="url(#grid)" opacity="0.5"/>
+          <path fill="rgba(45,212,191,0.025)" d="M0,250 C200,230 400,270 600,250 C800,230 1000,270 1200,250 C1350,235 1440,255 1440,250 L1440,320 L0,320Z"/>
+          <path fill="rgba(20,184,166,0.035)" d="M0,265 C240,245 480,285 720,265 C960,245 1200,285 1440,265 L1440,320 L0,320Z"/>
+          <path fill="rgba(13,148,136,0.05)" d="M0,210 C160,240 320,180 480,210 C640,240 800,180 960,210 C1120,240 1280,180 1440,210 L1440,320 L0,320Z"/>
+          <path fill="rgba(20,184,166,0.07)" d="M0,225 C180,185 360,265 540,225 C720,185 900,265 1080,225 C1260,185 1440,265 1440,225 L1440,320 L0,320Z"/>
+          <path fill="rgba(20,184,166,0.13)" d="M0,190 C120,150 240,230 360,190 C480,150 600,230 720,190 C840,150 960,230 1080,190 C1200,150 1320,230 1440,190 L1440,320 L0,320Z" filter="url(#glow)"/>
+        </svg>
+      </div>
+    </section>
+    <!-- Sección de formulario para análisis -->
+    <section class="section-form" id="seccion-form" role="region" aria-label="Formulario de análisis de exposición digital">
+      <div class="side-gif side-gif-left" aria-hidden="true"></div>
+      <div class="side-gif side-gif-right" aria-hidden="true"></div>
+      <div class="container">
+        <h2 class="section-title">Analizar Perfil Digital</h2>
+        <p class="section-sub">Ingresa tus datos para calcular tu exposición digital</p>
+        
+        <!-- Formulario principal con validación HTML5 -->
+        <form id="formPerfil" class="form-card" novalidate aria-label="Formulario de análisis">
+          
+          <!-- Campo: Nickname -->
+          <div class="field">
+            <label for="nombre" class="label">
+              <span aria-required="true">*</span> Nickname
+            </label>
+            <input 
+              type="text" 
+              id="nombre" 
+              class="input" 
+              placeholder="Tu nickname" 
+              required 
+              minlength="3" 
+              maxlength="100" 
+              autocomplete="username"
+              aria-describedby="error-nombre"
+              aria-invalid="false">
+            <span class="err" id="error-nombre" role="alert" aria-live="polite"></span>
+          </div>
+          
+          <!-- Campo: Email -->
+          <div class="field">
+            <label for="email" class="label">
+              <span aria-required="true">*</span> Correo electrónico
+            </label>
+            <input 
+              type="email" 
+              id="email" 
+              class="input" 
+              placeholder="correo@ejemplo.com" 
+              required 
+              maxlength="254" 
+              autocomplete="email"
+              aria-describedby="error-email"
+              aria-invalid="false">
+            <span class="err" id="error-email" role="alert" aria-live="polite"></span>
+          </div>
+          
+          <!-- Campo: Edad -->
+          <div class="field">
+            <label for="edad" class="label">
+              <span aria-required="true">*</span> Edad
+            </label>
+            <input 
+              type="number" 
+              id="edad" 
+              class="input" 
+              placeholder="Tu edad" 
+              required 
+              min="13" 
+              max="100"
+              aria-describedby="error-edad"
+              aria-invalid="false">
+            <span class="err" id="error-edad" role="alert" aria-live="polite"></span>
+          </div>
+          
+          <!-- Campo: Red Social -->
+          <div class="field">
+            <label for="redSocial" class="label">
+              <span aria-required="true">*</span> Red social principal
+            </label>
+            <select 
+              id="redSocial" 
+              class="input" 
+              required
+              aria-describedby="error-redSocial"
+              aria-invalid="false">
+              <option value="">-- Selecciona una red social --</option>
+              <option value="Facebook">Facebook</option>
+              <option value="Instagram">Instagram</option>
+              <option value="TikTok">TikTok</option>
+              <option value="Twitter/X">Twitter/X</option>
+              <option value="Snapchat">Snapchat</option>
+              <option value="YouTube">YouTube</option>
+            </select>
+            <span class="err" id="error-redSocial" role="alert" aria-live="polite"></span>
+          </div>
+          
+          <!-- Campo: Horas de uso -->
+          <div class="field">
+            <label for="horas" class="label">
+              <span aria-required="true">*</span> Horas de uso diario
+            </label>
+            <input 
+              type="number" 
+              id="horas" 
+              class="input" 
+              placeholder="Ej: 4.5" 
+              required 
+              min="0" 
+              max="24" 
+              step="0.1"
+              aria-describedby="error-horas"
+              aria-invalid="false">
+            <span class="err" id="error-horas" role="alert" aria-live="polite"></span>
+          </div>
+          
+          <button type="submit" class="btn-submit" aria-label="Enviar formulario y analizar exposición digital">
+            Analizar Exposicion
+          </button>
+        </form>
+      </div>
+    </section>
+    
+    <!-- Sección de resultados del análisis -->
+    <section id="seccionResultado" class="section-result hidden" aria-label="Resultado del análisis" role="region" aria-live="polite" aria-atomic="true">
+      <div class="container">
+        <div id="resultadoContenido" class="result-card"></div>
+      </div>
+    </section>
+    
+    <!-- Sección de perfiles guardados -->
+    <section class="section-perfiles" id="seccion-perfiles" role="region" aria-label="Historial de perfiles analizados">
+      <div class="container">
+        <h2 class="section-title">Perfiles Analizados</h2>
+        <p id="msgVacio" class="empty-msg" role="status">No hay perfiles analizados aún. ¡Completa el formulario para comenzar!</p>
+        <div id="contenedorTarjetas" class="cards-grid" role="list"></div>
+      </div>
+    </section>
+    
+    <!-- Sección de información (características clave) -->
+    <section class="section-info" id="seccion-info" role="region" aria-label="Características de GhostProfile">
+      <article class="info-card" role="article">
+        <div class="info-icon" aria-hidden="true">&#x1F4CA;</div>
+        <h3>DATA INGESTION</h3>
+        <p>Captura y procesamiento de datos en tiempo real con validación avanzada</p>
+      </article>
+      
+      <article class="info-card" role="article">
+        <div class="info-icon" aria-hidden="true">&#x1F9E0;</div>
+        <h3>SYSTEM INTELLIGENCE</h3>
+        <p>Análisis inteligente de patrones digitales y métricas de exposición</p>
+      </article>
+      
+      <article class="info-card" role="article">
+        <div class="info-icon" aria-hidden="true">&#x26A1;</div>
+        <h3>AUTONOMOUS ACTION</h3>
+        <p>Recomendaciones automáticas personalizadas según tu perfil</p>
+      </article>
+    </section>
+  </main>
+  
+  <!-- Pie de página -->
+  <footer class="footer" role="contentinfo">
+    <div class="container footer-inner">
+      <p>&copy; 2025 GhostProfile - Análisis de Exposición Digital</p>
+      <p class="footer-ai">Desarrollado con apoyo de IA | <a href="README.md" title="Ver documentación del proyecto">Documentación</a></p>
+    </div>
+  </footer>
+  
+  <!-- Script principal -->
+  <script src="script.js" defer></script>
+</body>
+</html>
