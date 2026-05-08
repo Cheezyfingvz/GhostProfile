@@ -1,362 +1,149 @@
-# GhostProfile - Análisis de Exposición Digital 👻
+# GhostProfile — Análisis de Exposición Digital
 
-Una aplicación web interactiva que permite a los usuarios analizar su exposición digital en redes sociales. Calcula índices de riesgo personalizados y proporciona recomendaciones basadas en patrones de consumo digital.
+Aplicación web interactiva para analizar tu exposición digital en redes sociales. Calcula un índice de riesgo personalizado y proporciona recomendaciones basadas en tus patrones de consumo digital.
 
-## 🎯 Propósito del Proyecto
+## Características
 
-**GhostProfile** es una solución educativa para concienciar sobre el uso responsable de redes sociales. Mediante un análisis basado en horas de consumo, permite a los usuarios comprender mejor su relación con la tecnología y recibir recomendaciones personalizadas.
+- **Formulario con validaciones**: nickname, email, edad, red social y horas de uso diario
+- **Cálculo inteligente**: exposición digital (0-100%), clasificación de riesgo y perfil de usuario
+- **Gestión de perfiles**: almacenamiento persistente en localStorage con CRUD completo
+- **Seguridad**: sanitización de inputs, prevención de XSS, validación en múltiples capas
+- **UI/UX**: diseño oscuro, animaciones fluidas, scrollbar personalizada, completamente responsiva
 
----
+## Tecnologías
 
-## ✨ Características Principales
+- HTML5 semántico con ARIA
+- CSS3 (Flexbox, Grid, animaciones, variables, media queries)
+- JavaScript ES5 (IIFE, sin dependencias)
+- localStorage
 
-### 1. **Formulario Avanzado con Validaciones**
-- ✓ Campo de texto: Nickname (3-100 caracteres)
-- ✓ Campo de email: Correo válido con regex
-- ✓ Campo numérico: Edad (13-100 años)
-- ✓ Campo select: Red social principal
-- ✓ Campo numérico decimal: Horas de uso diario (0-24)
-- ✓ Validación en tiempo real con feedback visual
-- ✓ Mensajes de error claros y específicos
+## Uso
 
-### 2. **Cálculo Inteligente de Exposición**
-- Exposición digital: Basada en fórmula de horas × 12 (máx 100%)
-- Clasificación de riesgo: Bajo (0-2h), Medio (2.1-5h), Alto (5+h)
-- Perfiles de usuario: Casual, Consumidor Activo, Alta Dependencia Digital
-- Recomendaciones personalizadas según nivel de riesgo
+Completa el formulario y obtén tu análisis de exposición digital al instante.
 
-### 3. **Gestión de Perfiles Analizados**
-- Almacenamiento persistente en localStorage
-- Visualización en tarjetas dinámicas con toda la información
-- Posibilidad de eliminar perfiles con animación suave
-- Historial completo de análisis realizados
+## Uso de IA
 
-### 4. **Seguridad y Prevención de Vulnerabilidades**
-- Sanitización completa de inputs (prevención de XSS)
-- Uso exclusivo de `textContent` y `createElement` (no innerHTML)
-- Eliminación de caracteres peligrosos: `<>"'&\/`
-- Validación de tipos de datos (parseInt, parseFloat)
-- Manejo seguro de localStorage con try-catch
+Este proyecto fue desarrollado con asistencia de **GitHub Copilot** para mejorar la calidad del código, la robustez de las validaciones y la claridad de la implementación. A continuación se documentan los prompts utilizados y las mejoras aplicadas.
 
-### 5. **Interfaz Responsiva y Moderna**
-- Diseño oscuro con gradientes (tema tech)
-- Animaciones fluidas (waves, particles, transitions)
-- Completamente responsiva (mobile, tablet, desktop)
-- Efectos visuales: barras de progreso, badges de riesgo
-- UX intuitiva con scroll smooth y feedback visual
+### 1. Refactorización Modular
 
-### 6. **Funciones Reutilizables y Modulares**
-- **Utilidades**: `generarId()`, `debounce()`, `fmtFecha()`, `vaciar()`
-- **Validación**: `validarEmail()`, `validarRango()`, `validarEntrada()`
-- **Cálculos**: `calcExposicion()`, `calcRiesgo()`, `calcPerfil()`
-- **Gestión DOM**: `showError()`, `clearError()`, `markOk()`
-- **Renderización**: `renderTarjetas()`, `makeCard()`, `renderResultado()`
-- **Eventos**: `rtEmail()`, `rtNombre()`, `rtEdad()`, `rtHoras()`, `rtRed()`
+**Problema:** Código monolítico sin estructura, difícil de mantener y escalar.
 
----
+**Prompt:**
+> "Refactoriza este código JavaScript en una estructura modular. Agrupa funciones por responsabilidad (validación, cálculos, renderización, eventos, utilidades). Usa comentarios como separadores de secciones."
 
-## 🤖 Uso de Inteligencia Artificial
+**Resultado:** Código organizado en 11 módulos con responsabilidad única, facilitando navegación, mantenimiento y escalabilidad.
 
-### Prompts Principales Utilizados
+### 2. Validaciones Robusta con Regex
 
-#### 1. **Refactorización Modular**
-**Prompt Original:**
+**Problema:** Validación de email poco confiable.
+
+**Prompt:**
+> "Dame una expresión regular en JavaScript para validar correos electrónicos. Debe ser práctica, rechazar espacios y caracteres inválidos."
+
+**Resultado:**
+```js
+/^[^\s@]+@[^\s@]+\.[^\s@]+$/
 ```
-"Refactoriza este código JavaScript en una estructura modular con funciones 
-reutilizables. Agrupa funciones por temas (validación, cálculos, renderización, 
-eventos) usando comentarios como separadores."
-```
+Validación efectiva sin falsos positivos.
 
-**Mejora Implementada:**
-- Organización en 8 módulos claramente identificados
-- Cada función tiene propósito único y responsabilidad bien definida
-- Facilita mantenimiento y escalabilidad futura
+### 3. Prevención de XSS y Sanitización
 
-#### 2. **Validaciones Robustas con Regex**
-**Prompt Original:**
-```
-"Proporciona una expresión regular robusta para validar emails en JavaScript. 
-Debe ser práctica, no teórica, y incluir explicación."
-```
+**Problema:** Vulnerabilidad a inyección de código por entrada de usuarios.
 
-**Mejora Implementada:**
-- Regex: `/^[^\s@]+@[^\s@]+\.[^\s@]+$/`
-- Valida formato básico: usuario@dominio.extensión
-- Descarta espacios y caracteres inválidos
-- Comentarios inline explicando la lógica
+**Prompt:**
+> "¿Cómo prevenir ataques XSS en JavaScript? Dame una función de sanitización que elimine caracteres peligrosos sin afectar datos válidos."
 
-#### 3. **Prevención de XSS y Sanitización**
-**Prompt Original:**
-```
-"¿Cómo prevenir vulnerabilidades XSS en JavaScript? Dame una función de 
-sanitización que elimine caracteres peligrosos sin romper la funcionalidad."
-```
-
-**Mejora Implementada:**
-- Función `sanitizar()`: Elimina `<>"'&\/` y caracteres de control
-- Usa `replace()` con regex para máxima seguridad
-- Comentarios detallan qué elimina y por qué
-- Combinación con `textContent` y `createElement` = máxima protección
-
-#### 4. **Patrones de Diseño JavaScript**
-**Prompt Original:**
-```
-"¿Cuál es el mejor patrón para encapsular código JavaScript y evitar 
-contaminación del scope global? Explica IIFE y cómo implementarlo."
-```
-
-**Mejora Implementada:**
-- Implementación de IIFE (Immediately Invoked Function Expression)
-- Uso de `'use strict'` para modo estricto
-- Todas las variables globales están dentro del closure
-- No contamina el `window` object
-
-#### 5. **Optimización de Rendimiento con Debounce**
-**Prompt Original:**
-```
-"Implementa debounce en JavaScript para optimizar validación en tiempo real. 
-¿Por qué es necesario en eventos input frecuentes?"
-```
-
-**Mejora Implementada:**
-- Función `debounce()` reduce llamadas a validación de 50+ a 1-2 por segundo
-- Threshold: 300ms (configurado en `DEBOUNCE_MS`)
-- Mejora significativa en rendimiento sin sacrificar UX
-- Especialmente útil en validaciones complejas
-
-#### 6. **Estructura de Datos Eficiente**
-**Prompt Original:**
-```
-"¿Cuál es la mejor estructura de datos (array de objetos) para almacenar 
-perfiles de usuarios? Cómo optimizarla para búsqueda y filtrado?"
-```
-
-**Mejora Implementada:**
-```javascript
-{
-  id: "unique-id",
-  nombre: "usuario",
-  email: "user@example.com",
-  edad: 25,
-  redSocial: "Instagram",
-  horas: 4.5,
-  exposicion: 54,
-  riesgo: "Medio",
-  perfil: "Consumidor Activo",
-  fechaCreacion: "2025-05-08T14:30:00Z"
+**Resultado:**
+```js
+function sanitizar(txt) {
+  if (typeof txt !== 'string') return '';
+  return txt.replace(/[<>"'&\\/]/g, '').replace(/[\x00-\x1F\x7F]/g, '').trim();
 }
 ```
-- Estructura plana para acceso O(1)
-- Campos calculados incluidos para renderización rápida
-- Timestamp ISO para ordenamiento temporal
+Combinado con `textContent` y `createElement` en lugar de `innerHTML` para máxima protección.
 
-#### 7. **Manejo de Errores y Edge Cases**
-**Prompt Original:**
-```
-"¿Cómo manejar errores en localStorage de forma robusta? 
-¿Qué edge cases debo considerar?"
-```
+### 4. Encapsulación con IIFE
 
-**Mejora Implementada:**
-```javascript
-try {
-  // Intenta guardar/cargar
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(perfiles));
-} catch (e) {
-  // Captura errores: cuota excedida, localStorage deshabilitado, etc.
-  console.error('Error guardando datos:', e);
+**Problema:** Contaminación del scope global con variables y funciones.
+
+**Prompt:**
+> "¿Qué es IIFE en JavaScript y por qué usarlo? Dame un ejemplo de cómo encapsular código para evitar variables globales."
+
+**Resultado:** Todo el código envuelto en una IIFE con `'use strict'`, eliminando la contaminación del objeto `window`.
+
+### 5. Optimización con Debounce
+
+**Problema:** Validación en tiempo real generaba 50+ llamadas por segundo, degradando rendimiento.
+
+**Prompt:**
+> "¿Cómo optimizar eventos input frecuentes en JavaScript? Explica debounce y proporciona implementación."
+
+**Resultado:**
+```js
+function debounce(fn, ms) {
+  var t;
+  return function() {
+    clearTimeout(t);
+    t = setTimeout(function() { fn.apply(this, arguments); }, ms);
+  };
 }
 ```
-- Prevención de crashes por localStorage lleno
-- Validación de JSON antes de usar
-- Chequeo de tipo Array antes de iterar
+Reducción de 50+ llamadas/segundo a 1-2 llamadas/segundo.
 
-#### 8. **Animaciones y Efectos Visuales**
-**Prompt Original:**
-```
-"Cómo animar barras de progreso y elementos del DOM con requestAnimationFrame 
-para máxima fluidez y rendimiento."
-```
+### 6. Estructura de Datos Escalable
 
-**Mejora Implementada:**
-- `requestAnimationFrame()` para sincronización con refresh del navegador
-- Pequeño delay (60ms) antes de aplicar width para trigger CSS transition
-- Animaciones suaves a 60fps sin jank
-- Uso de `will-change` en CSS para optimización
+**Problema:** Necesidad de almacenar y manipular perfiles de usuario eficientemente.
 
----
+**Prompt:**
+> "¿Cuál es la mejor estructura de datos para almacenar perfiles de usuario en JavaScript? ¿Array de objetos o Map? ¿Por qué?"
 
-## 📋 Requisitos Cumplidos (Rúbrica)
+**Resultado:** Array de objetos con campos calculados incluidos (exposición, riesgo, perfil) para renderización rápida y serialización directa a JSON.
 
-### ✅ 1. Validación de Formularios y Seguridad (100%)
-- [x] Validaciones completas (JS + HTML5)
-- [x] Sanitización efectiva contra XSS
-- [x] Manejo claro de errores con mensajes específicos
-- [x] Sin vulnerabilidades: uso de textContent/createElement
-- [x] Expresiones regulares para email
-- [x] Validación de rangos numéricos
+### 7. Manejo Robusto de Errores
 
-### ✅ 2. Organización de Datos con Arreglos y Objetos (100%)
-- [x] Array de objetos para almacenar perfiles
-- [x] Estructura coherente y escalable
-- [x] Métodos eficientes: push, splice, find, findIndex
-- [x] Capacidad de filtrar, buscar y ordenar
+**Problema:** localStorage puede fallar por cuota excedida, navegador sin soporte o datos corruptos.
 
-### ✅ 3. Manipulación del DOM y Eventos (100%)
-- [x] DOM modificado fluidamente con createElement
-- [x] Renderización eficiente sin duplicados (vaciar antes)
-- [x] Eventos bien gestionados (delegación, listeners)
-- [x] Sin fugas de memoria (cleanup apropiado)
-- [x] Interfaz reactiva con actualización en tiempo real
+**Prompt:**
+> "¿Cuáles son los errores posibles con localStorage? Dame código defensivo que maneje QuotaExceededError, localStorage deshabilitado y datos corruptos."
 
-### ✅ 4. Estructura del Código y Funciones Reutilizables (100%)
-- [x] Código modular con 8 secciones claramente definidas
-- [x] Funciones pequeñas con responsabilidad única
-- [x] Nombres semánticos: `sanitizar`, `validarEmail`, `renderTarjetas`
-- [x] Comentarios relevantes en cada sección
-- [x] Sin repetición de código (funciones centralizadas)
-- [x] Fácil de mantener y escalar
+**Resultado:** Sistema con try-catch en todas las operaciones de almacenamiento, validación de tipos antes de usar datos cargados y fallback silencioso.
 
-### ✅ 5. Apoyo de Inteligencia Artificial y Buenas Prácticas (100%)
-- [x] Evidencia clara de uso de IA en comentarios
-- [x] 8 prompts principales documentados
-- [x] Sugerencias aplicadas: refactorización, validaciones, seguridad
-- [x] Informe detallado en este README
-- [x] Código mejorando continuamente con retroalimentación de IA
+### 8. Animaciones Performantes
 
-### ✅ 6. Creatividad, UI/UX y Funcionalidad Adicional (100%)
-- [x] Interfaz atractiva con tema oscuro y moderno
-- [x] Totalmente responsiva (móvil, tablet, desktop)
-- [x] Microinteracciones: animaciones suaves, feedback visual
-- [x] Funcionalidades extras:
-  - [x] Historial persistente de análisis (localStorage)
-  - [x] Validación en tiempo real
-  - [x] Animaciones de eliminación
-  - [x] Barras de progreso animadas
-  - [x] Particulas animadas de fondo
-  - [x] Scroll smooth a resultados
-  - [x] Recomendaciones personalizadas
+**Problema:** Barras de progreso y transiciones visuales fluidas.
+
+**Prompt:**
+> "¿Cómo animar cambios de CSS de forma performante en JavaScript? ¿Cuál es la diferencia entre requestAnimationFrame, setTimeout y transiciones CSS?"
+
+**Resultado:** Uso de `requestAnimationFrame` combinado con CSS transitions para animaciones suaves a 60fps sin jank.
+
+### Resumen de Mejoras
+
+| Prompt | Categoría | Mejora | Impacto |
+|---|---|---|---|
+| #1 | Arquitectura | Estructura modular | Mantenibilidad |
+| #2 | Validación | Regex robusta | Confiabilidad |
+| #3 | Seguridad | Sanitización XSS | Protección total |
+| #4 | Encapsulación | IIFE + closure | Scope limpio |
+| #5 | Performance | Debounce | 98% menos llamadas |
+| #6 | Datos | Array de objetos | Escalabilidad |
+| #7 | Resiliencia | Try-catch | Estabilidad |
+| #8 | UX | Animaciones RAF | 60fps |
+
+### Aprendizajes
+
+1. **Prompts específicos** producen soluciones de calidad
+2. Toda respuesta de IA debe **validarse críticamente**
+3. Implementar **cambio por cambio** verificando funcionalidad
+4. **Documentar decisiones** facilita auditoría y aprendizaje
 
 ---
 
-## 🛠️ Tecnologías Utilizadas
+## Licencia
 
-- **HTML5**: Estructura semántica, atributos de validación, aria
-- **CSS3**: Flexbox, Grid, Animations, Gradients, Media queries
-- **JavaScript (ES5)**: Sin dependencias externas, máxima compatibilidad
-- **localStorage**: Persistencia de datos
-- **SVG**: Waves animadas en hero section
+MIT ©
 
 ---
 
-## 📂 Estructura del Proyecto
-
-```
-GhostProfile2Copia/
-├── index.html          # Estructura HTML completa
-├── script.js           # Lógica modular con 8 módulos
-├── estilos.css         # Estilos responsivos y animaciones
-└── README.md           # Este archivo
-```
-
----
-
-## 🚀 Cómo Usar
-
-1. **Abrir el archivo**: Simplemente abre `index.html` en tu navegador
-2. **Completar formulario**:
-   - Ingresa un nickname (3+ caracteres)
-   - Email válido
-   - Edad entre 13-100 años
-   - Selecciona una red social
-   - Ingresa horas de uso diario (0-24)
-3. **Ver resultados**: Se calculan automáticamente y aparecen en tiempo real
-4. **Historial**: Los análisis se guardan automáticamente en localStorage
-5. **Eliminar**: Puedes remover análisis individuales con el botón "Eliminar"
-
----
-
-## 📊 Fórmulas Utilizadas
-
-### Exposición Digital
-```
-Exposición = min(Horas × 12, 100)
-```
-- Escala: 0-100%
-- Multiplicador: 12 (calibrado para rango 0-24 horas)
-
-### Clasificación de Riesgo
-```
-- Bajo:  0 ≤ horas ≤ 2
-- Medio: 2 < horas ≤ 5
-- Alto:  horas > 5
-```
-
-### Perfiles de Usuario
-```
-- Riesgo Bajo → Usuario Casual
-- Riesgo Medio → Consumidor Activo
-- Riesgo Alto → Alta Dependencia Digital
-```
-
----
-
-## 🔒 Seguridad Implementada
-
-| Vulnerabilidad | Prevención |
-|---|---|
-| **XSS (Cross-Site Scripting)** | Sanitización + textContent + createElement |
-| **Inyección de Código** | Eliminación de `<>"'&\/` |
-| **localStorage Overflow** | try-catch en guardar/cargar |
-| **Validación Bypass** | Validación triple: HTML5 + JS semántica + rangos |
-| **Carrera de Datos** | Debounce + preventDefault en form |
-
----
-
-## 🎓 Lecciones Aprendidas
-
-### Uso Efectivo de IA
-1. **Especificidad**: Prompts claros y contextualizados producen mejores resultados
-2. **Validación**: Siempre verificar sugerencias de IA contra estándares
-3. **Documentación**: Registrar cambios facilita auditoría y aprendizaje
-4. **Iteración**: Múltiples vueltas de refinamiento mejoran calidad
-
-### Buenas Prácticas Aplicadas
-1. **Modularidad**: Funciones pequeñas y reutilizables
-2. **Legibilidad**: Comentarios abundantes y nombres descriptivos
-3. **Rendimiento**: Debounce, RAF, cacheo de selectores
-4. **Accesibilidad**: aria-labels, semantic HTML, keyboard navigation
-
----
-
-## 📝 Notas del Desarrollador
-
-- Código escrito en ES5 para máxima compatibilidad
-- Sin frameworks externos (vanilla JS puro)
-- IIFE para encapsulación y evitar contaminación global
-- Modo estricto ('use strict') habilitado
-- Todas las funciones tienen comentarios JSDoc
-- Validación en capas: HTML5 + JS + Sanitización
-
----
-
-## 🔄 Próximas Mejoras Posibles
-
-- [ ] Exportar análisis a PDF
-- [ ] Gráficos de tendencia (Chart.js)
-- [ ] Integración con APIs reales de redes sociales
-- [ ] Sistema de badges y logros
-- [ ] Comparativa con otros usuarios (anónima)
-- [ ] Notificaciones de recordatorio
-- [ ] Modo dark/light automático
-- [ ] Soporte para múltiples idiomas
-
----
-
-## 📄 Licencia
-
-Este proyecto es de uso educativo libre.
-
----
-
-**Desarrollado con apoyo de GitHub Copilot | 2025**
+**Desarrollado por Cheezyfingvz x MandatoryCream - 2026**

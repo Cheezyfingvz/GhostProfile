@@ -6,13 +6,25 @@
   <meta name="description" content="GhostProfile - Analiza tu exposición digital en redes sociales. Descubre tu perfil de usuario con análisis avanzado de patrones de consumo digital.">
   <meta name="keywords" content="redes sociales, análisis digital, exposición, tiempo pantalla, perfil usuario">
   <meta name="author" content="GhostProfile Team">
-  <title>GhostProfile – Análisis de Exposición Digital 2025</title>
+  <title>GhostProfile – Análisis de Exposición Digital</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="estilos.css">
 </head>
 <body>
+  <!-- Barra de progreso de scroll -->
+  <div class="scroll-progress" role="progressbar" aria-label="Progreso de lectura"></div>
+  
+  <!-- Figuras geométricas flotantes de fondo -->
+  <div class="shapes-bg" aria-hidden="true">
+    <div class="shape shape-1"></div>
+    <div class="shape shape-2"></div>
+    <div class="shape shape-3"></div>
+    <div class="shape shape-4"></div>
+    <div class="shape shape-5"></div>
+  </div>
+  
   <!-- Contenedor de partículas animadas (efecto de fondo) -->
   <div id="particulas" aria-hidden="true"></div>
   
@@ -23,9 +35,11 @@
   <header class="header" role="banner">
     <div class="container header-inner">
       <div class="logo">
+        <img src="assets/ghost-cute.gif" alt="" class="ghost ghost-nav-2" aria-hidden="true">
         <span aria-label="GhostProfile - Análisis de Exposición Digital">GhostProfile</span>
       </div>
       <nav role="navigation" aria-label="Navegación principal">
+        <img src="assets/ghost-cute.gif" alt="" class="ghost ghost-nav" aria-hidden="true">
         <a href="#seccion-form" class="nav-link">Analizar</a>
         <a href="#seccion-perfiles" class="nav-link">Perfiles</a>
         <a href="#seccion-info" class="nav-link">Info</a>
@@ -37,10 +51,18 @@
   <main role="main">
     <!-- Sección Hero con presentación principal -->
     <section class="hero" role="region" aria-label="Presentación de GhostProfile">
+      <img src="assets/ghost-cute.gif" alt="" class="ghost ghost-hero" aria-hidden="true">
+      <img src="assets/ghost-cute.gif" alt="" class="ghost ghost-hero-2" aria-hidden="true">
+      <img src="assets/ghost-cute.gif" alt="" class="ghost ghost-hero-3" aria-hidden="true">
+      <img src="assets/ghost-cute.gif" alt="" class="ghost ghost-hero-4" aria-hidden="true">
+      <img src="assets/ghost-cute.gif" alt="" class="ghost ghost-hero-5" aria-hidden="true">
       <div class="container hero-inner">
         <h1 class="hero-title">GhostProfile</h1>
         <p class="hero-edition">¿Cuánto tiempo dedicas a las redes sociales?</p>
         <p class="hero-text">Analiza tu exposición digital y descubre tu perfil de usuario en redes sociales con tecnología de análisis avanzado.</p>
+        <div class="typewriter-wrap" aria-live="polite" aria-label="Frases sobre exposición digital">
+          <span class="typewriter-text" id="maquinaEscribir"></span>
+        </div>
       </div>
       <div class="waves-wrap" aria-hidden="true">
         <svg viewBox="0 0 1440 320" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
@@ -61,14 +83,18 @@
     </section>
     <!-- Sección de formulario para análisis -->
     <section class="section-form" id="seccion-form" role="region" aria-label="Formulario de análisis de exposición digital">
+      <img src="assets/ghost-cute.gif" alt="" class="ghost ghost-form" aria-hidden="true">
+      <img src="assets/ghost-cute.gif" alt="" class="ghost ghost-form-2" aria-hidden="true">
+      <img src="assets/ghost-cute.gif" alt="" class="ghost ghost-form-3" aria-hidden="true">
+      <img src="assets/ghost-cute.gif" alt="" class="ghost ghost-form-4" aria-hidden="true">
       <div class="side-gif side-gif-left" aria-hidden="true"></div>
       <div class="side-gif side-gif-right" aria-hidden="true"></div>
       <div class="container">
-        <h2 class="section-title">Analizar Perfil Digital</h2>
-        <p class="section-sub">Ingresa tus datos para calcular tu exposición digital</p>
+        <h2 class="section-title reveal">Analizar Perfil Digital</h2>
+        <p class="section-sub reveal">Ingresa tus datos para calcular tu exposición digital</p>
         
         <!-- Formulario principal con validación HTML5 -->
-        <form id="formPerfil" class="form-card" novalidate aria-label="Formulario de análisis">
+        <form id="formularioPerfil" class="form-card reveal-scale" novalidate aria-label="Formulario de análisis">
           
           <!-- Campo: Nickname -->
           <div class="field">
@@ -91,20 +117,20 @@
           
           <!-- Campo: Email -->
           <div class="field">
-            <label for="email" class="label">
+            <label for="correo" class="label">
               <span aria-required="true">*</span> Correo electrónico
             </label>
             <input 
               type="email" 
-              id="email" 
+              id="correo" 
               class="input" 
               placeholder="correo@ejemplo.com" 
               required 
               maxlength="254" 
               autocomplete="email"
-              aria-describedby="error-email"
+              aria-describedby="error-correo"
               aria-invalid="false">
-            <span class="err" id="error-email" role="alert" aria-live="polite"></span>
+            <span class="err" id="error-correo" role="alert" aria-live="polite"></span>
           </div>
           
           <!-- Campo: Edad -->
@@ -175,35 +201,66 @@
     
     <!-- Sección de resultados del análisis -->
     <section id="seccionResultado" class="section-result hidden" aria-label="Resultado del análisis" role="region" aria-live="polite" aria-atomic="true">
+      <img src="assets/ghost-cute.gif" alt="" class="ghost ghost-result" aria-hidden="true">
+      <img src="assets/ghost-cute.gif" alt="" class="ghost ghost-result-2" aria-hidden="true">
+      <img src="assets/ghost-cute.gif" alt="" class="ghost ghost-result-3" aria-hidden="true">
       <div class="container">
         <div id="resultadoContenido" class="result-card"></div>
       </div>
     </section>
     
+    <!-- Divisor animado -->
+    <div class="section-divider" aria-hidden="true">
+      <img src="assets/ghost-cute.gif" alt="" class="ghost ghost-divider" aria-hidden="true">
+      <span class="divider-dot"></span>
+    </div>
+    
     <!-- Sección de perfiles guardados -->
     <section class="section-perfiles" id="seccion-perfiles" role="region" aria-label="Historial de perfiles analizados">
+      <img src="assets/ghost-cute.gif" alt="" class="ghost ghost-perfiles" aria-hidden="true">
+      <img src="assets/ghost-cute.gif" alt="" class="ghost ghost-perfiles-2" aria-hidden="true">
+      <img src="assets/ghost-cute.gif" alt="" class="ghost ghost-perfiles-3" aria-hidden="true">
+      <img src="assets/ghost-cute.gif" alt="" class="ghost ghost-perfiles-4" aria-hidden="true">
       <div class="container">
-        <h2 class="section-title">Perfiles Analizados</h2>
-        <p id="msgVacio" class="empty-msg" role="status">No hay perfiles analizados aún. ¡Completa el formulario para comenzar!</p>
+        <div class="perfiles-header">
+          <h2 class="section-title reveal">Perfiles Analizados</h2>
+          <span id="insigniaConteo" class="insignia-conteo hidden" aria-live="polite">0 perfiles</span>
+        </div>
+        <div id="statsPerfiles" class="stats-perfiles hidden"></div>
+        <p id="msgVacio" class="empty-msg" role="status">
+          <span class="empty-state-icon" aria-hidden="true">&#x1F50D;</span>
+          <span class="empty-state-text">No hay perfiles analizados aún</span>
+          <span class="empty-state-sub">Completa el formulario para comenzar a analizar tu exposición digital</span>
+        </p>
         <div id="contenedorTarjetas" class="cards-grid" role="list"></div>
       </div>
     </section>
     
+    <!-- Divisor animado -->
+    <div class="section-divider" aria-hidden="true">
+      <img src="assets/ghost-cute.gif" alt="" class="ghost ghost-divider" aria-hidden="true">
+      <span class="divider-dot"></span>
+    </div>
+    
     <!-- Sección de información (características clave) -->
     <section class="section-info" id="seccion-info" role="region" aria-label="Características de GhostProfile">
-      <article class="info-card" role="article">
+      <img src="assets/ghost-cute.gif" alt="" class="ghost ghost-info" aria-hidden="true">
+      <img src="assets/ghost-cute.gif" alt="" class="ghost ghost-info-2" aria-hidden="true">
+      <img src="assets/ghost-cute.gif" alt="" class="ghost ghost-info-3" aria-hidden="true">
+      <img src="assets/ghost-cute.gif" alt="" class="ghost ghost-info-4" aria-hidden="true">
+      <article class="info-card reveal-left" role="article">
         <div class="info-icon" aria-hidden="true">&#x1F4CA;</div>
         <h3>DATA INGESTION</h3>
         <p>Captura y procesamiento de datos en tiempo real con validación avanzada</p>
       </article>
       
-      <article class="info-card" role="article">
+      <article class="info-card reveal-scale" role="article">
         <div class="info-icon" aria-hidden="true">&#x1F9E0;</div>
         <h3>SYSTEM INTELLIGENCE</h3>
         <p>Análisis inteligente de patrones digitales y métricas de exposición</p>
       </article>
       
-      <article class="info-card" role="article">
+      <article class="info-card reveal-right" role="article">
         <div class="info-icon" aria-hidden="true">&#x26A1;</div>
         <h3>AUTONOMOUS ACTION</h3>
         <p>Recomendaciones automáticas personalizadas según tu perfil</p>
@@ -213,9 +270,11 @@
   
   <!-- Pie de página -->
   <footer class="footer" role="contentinfo">
+    <img src="assets/ghost-cute.gif" alt="" class="ghost ghost-footer" aria-hidden="true">
+    <img src="assets/ghost-cute.gif" alt="" class="ghost ghost-footer-2" aria-hidden="true">
     <div class="container footer-inner">
       <p>&copy; 2025 GhostProfile - Análisis de Exposición Digital</p>
-      <p class="footer-ai">Desarrollado con apoyo de IA | <a href="README.md" title="Ver documentación del proyecto">Documentación</a></p>
+      <p class="footer-ai">CHEEZYFINGVZ X MANDATORYCREAM | <a href="README.md" title="Ver documentación del proyecto">Documentación</a></p>
     </div>
   </footer>
   
