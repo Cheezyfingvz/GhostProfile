@@ -13,6 +13,9 @@
   <link rel="stylesheet" href="estilos.css">
 </head>
 <body>
+  <!-- Skip-to-content link para accesibilidad -->
+  <a href="#seccion-form" class="skip-link">Saltar al formulario de análisis</a>
+  
   <!-- Barra de progreso de scroll -->
   <div class="scroll-progress" role="progressbar" aria-label="Progreso de lectura"></div>
   
@@ -29,14 +32,14 @@
   <div id="particulas" aria-hidden="true"></div>
   
   <!-- Efecto glow central (decorativo) -->
-  <div class="glow-central" aria-hidden="true"></div>
+  <div class="glow-central" aria-hidden="true"></div> 
   
   <!-- Encabezado de navegación principal -->
   <header class="header" role="banner">
     <div class="container header-inner">
-      <div class="logo">
+      <div class="logo" aria-label="GhostProfile - Análisis de Exposición Digital">
         <img src="assets/ghost-cute.gif" alt="" class="ghost ghost-nav-2" aria-hidden="true">
-        <span aria-label="GhostProfile - Análisis de Exposición Digital">GhostProfile</span>
+        <span aria-hidden="true">GhostProfile</span>
       </div>
       <nav role="navigation" aria-label="Navegación principal">
         <img src="assets/ghost-cute.gif" alt="" class="ghost ghost-nav" aria-hidden="true">
@@ -156,12 +159,22 @@
             <label for="redSocial" class="label">
               <span aria-required="true">*</span> Red social principal
             </label>
-            <select 
-              id="redSocial" 
-              class="input" 
-              required
-              aria-describedby="error-redSocial"
-              aria-invalid="false">
+            <div class="custom-select" data-field="redSocial">
+              <button type="button" class="custom-select-trigger" role="combobox" aria-haspopup="listbox" aria-expanded="false" aria-label="Seleccionar red social">
+                <span class="custom-select-text">-- Selecciona una red social --</span>
+                <svg class="custom-select-arrow" width="14" height="9" viewBox="0 0 14 9"><path d="M1 1.5l6 6 6-6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </button>
+              <ul class="custom-select-options" role="listbox" aria-label="Redes sociales">
+                <li role="option" data-value="" class="custom-select-option custom-select-placeholder" aria-selected="true">-- Selecciona una red social --</li>
+                <li role="option" data-value="Facebook" class="custom-select-option">Facebook</li>
+                <li role="option" data-value="Instagram" class="custom-select-option">Instagram</li>
+                <li role="option" data-value="TikTok" class="custom-select-option">TikTok</li>
+                <li role="option" data-value="Twitter/X" class="custom-select-option">Twitter/X</li>
+                <li role="option" data-value="Snapchat" class="custom-select-option">Snapchat</li>
+                <li role="option" data-value="YouTube" class="custom-select-option">YouTube</li>
+              </ul>
+            </div>
+            <select id="redSocial" class="input hidden-select" required tabindex="-1" aria-hidden="true" aria-describedby="error-redSocial" aria-invalid="false">
               <option value="">-- Selecciona una red social --</option>
               <option value="Facebook">Facebook</option>
               <option value="Instagram">Instagram</option>
@@ -193,7 +206,7 @@
           </div>
           
           <button type="submit" class="btn-submit" aria-label="Enviar formulario y analizar exposición digital">
-            Analizar Exposicion
+            Analizar Exposición
           </button>
         </form>
       </div>
@@ -225,6 +238,10 @@
         <div class="perfiles-header">
           <h2 class="section-title reveal">Perfiles Analizados</h2>
           <span id="insigniaConteo" class="insignia-conteo hidden" aria-live="polite">0 perfiles</span>
+        </div>
+        <div class="search-bar-wrap" id="searchBarWrap" aria-hidden="true">
+          <input type="text" id="buscadorPerfiles" class="search-input" placeholder="Buscar por nickname, red social o riesgo..." autocomplete="off">
+          <span class="search-icon">&#x1F50D;</span>
         </div>
         <div id="statsPerfiles" class="stats-perfiles hidden"></div>
         <p id="msgVacio" class="empty-msg" role="status">
@@ -273,7 +290,7 @@
     <img src="assets/ghost-cute.gif" alt="" class="ghost ghost-footer" aria-hidden="true">
     <img src="assets/ghost-cute.gif" alt="" class="ghost ghost-footer-2" aria-hidden="true">
     <div class="container footer-inner">
-      <p>&copy; 2025 GhostProfile - Análisis de Exposición Digital</p>
+      <p>&copy; 2026 GhostProfile - Análisis de Exposición Digital</p>
       <p class="footer-ai">CHEEZYFINGVZ X MANDATORYCREAM | <a href="README.md" title="Ver documentación del proyecto">Documentación</a></p>
     </div>
   </footer>

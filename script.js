@@ -85,10 +85,41 @@
    * Propósito: Mostrar fechas de creación de perfiles de forma amigable al usuario
    */
   function formatearFecha(iso) {
-    return new Date(iso).toLocaleDateString('es-ES', {
+    return new Date(iso).toLocaleString('es-ES', {
       day: '2-digit', month: 'short', year: 'numeric',
       hour: '2-digit', minute: '2-digit'
     });
+  }
+  
+  /**
+   * Muestra una notificacion toast animada
+   * Asistido por GitHub Copilot: Sistema de notificaciones no obstructivas con auto-destruccion
+   * Proposito: Feedback visual no obstructivo para acciones del usuario
+   * Tipos: success (verde), error (rojo), info (teal)
+   */
+  function mostrarToast(mensaje, tipo) {
+    tipo = tipo || 'info';
+    
+    var contenedor = document.getElementById('toast-container');
+    if (!contenedor) {
+      contenedor = document.createElement('div');
+      contenedor.id = 'toast-container';
+      contenedor.className = 'toast-container';
+      document.body.appendChild(contenedor);
+    }
+    
+    var toast = document.createElement('div');
+    toast.className = 'toast ' + tipo;
+    toast.textContent = mensaje;
+    
+    contenedor.appendChild(toast);
+    
+    setTimeout(function() {
+      toast.classList.add('removing');
+      setTimeout(function() {
+        if (toast.parentNode) toast.parentNode.removeChild(toast);
+      }, 300);
+    }, 3000);
   }
   
   /**
@@ -116,7 +147,7 @@
   function sanitizar(txt) {
     if (typeof txt !== 'string') return '';
     // Remueve caracteres potencialmente peligrosos
-    return txt.replace(/[<>"'&\\/]/g, '')
+    return txt.replace(/[<>"'&\\]/g, '')
               .replace(/[\x00-\x1F\x7F]/g, '')
               .trim();
   }
@@ -131,7 +162,7 @@
    */
   function validarCorreo(e) {
     // Regex básica pero efectiva: [usuarios]@[dominio].[extensión]
-    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e);
+    return /^[^\s@]+@[^\s@]+\.[a-zA-Z]{2,}$/.test(e);
   }
   
   /**
@@ -170,7 +201,7 @@
     // Validación de edad
     if (d.edad === '' || d.edad === null || d.edad === undefined) {
       errores.push({ campo: 'edad', mensaje: 'La edad es obligatoria' });
-    } else if (!validarRango(d.edad, EDAD_MIN, EDAD_MAX)) {
+    } else if (!validarRango(parseInt(d.edad, 10), EDAD_MIN, EDAD_MAX)) {
       errores.push({ campo: 'edad', mensaje: 'Edad entre 13 y 100' });
     }
     
@@ -182,7 +213,7 @@
     // Validación de horas de uso
     if (d.horas === '' || d.horas === null || d.horas === undefined) {
       errores.push({ campo: 'horas', mensaje: 'Las horas son obligatorias' });
-    } else if (!validarRango(d.horas, HORAS_MIN, HORAS_MAX)) {
+    } else if (!validarRango(parseFloat(d.horas), HORAS_MIN, HORAS_MAX)) {
       errores.push({ campo: 'horas', mensaje: 'Horas entre 0 y 24' });
     }
     
@@ -288,6 +319,7 @@
         perfiles.splice(indice, 1);
         guardar();
         mostrarTarjetas();
+        mostrarToast('Perfil eliminado', 'info');
       }
     }, ELIMINAR_MS);
   }
@@ -350,6 +382,12 @@
       entrada.classList.remove('has-ok');
       entrada.setAttribute('aria-invalid', 'true');
     }
+    // Sincronizar custom select
+    var customSelect = document.querySelector('.custom-select[data-field="' + campo + '"]');
+    if (customSelect) {
+      customSelect.classList.add('has-error');
+      customSelect.classList.remove('has-ok');
+    }
     if (spanError) {
       spanError.textContent = msg;
       spanError.classList.add('show');
@@ -363,6 +401,11 @@
     if (entrada) {
       entrada.classList.remove('has-error');
       entrada.setAttribute('aria-invalid', 'false');
+    }
+    // Sincronizar custom select
+    var customSelect = document.querySelector('.custom-select[data-field="' + campo + '"]');
+    if (customSelect) {
+      customSelect.classList.remove('has-error');
     }
     if (spanError) {
       spanError.textContent = '';
@@ -389,6 +432,11 @@
     var entrada = document.getElementById(campo);
     if (entrada && !entrada.classList.contains('has-error')) {
       entrada.classList.add('has-ok');
+    }
+    // Sincronizar custom select
+    var customSelect = document.querySelector('.custom-select[data-field="' + campo + '"]');
+    if (customSelect && !customSelect.classList.contains('has-error')) {
+      customSelect.classList.add('has-ok');
     }
   }
   
@@ -630,7 +678,7 @@
     var itemsMetricas = [
       ['Red Social', p.redSocial],
       ['Uso Diario', p.horas + 'h'],
-      ['Edad', p.edad + ' anos']
+      ['Edad', p.edad + ' años']
     ];
     
     for (var i = 0; i < itemsMetricas.length; i++) {
@@ -661,46 +709,80 @@
     seccionExp.appendChild(etiquetaExp);
     seccionExp.appendChild(crearBarra(p.exposicion, p.riesgo));
     
-    // Clasificación de riesgo y perfil
+    // Clasificación de riesgo y perfil con tooltips
     var clasificacion = document.createElement('div');
     clasificacion.className = 'res-class';
+    
+    // Tooltip envolvente para riesgo
+    var wrapRiesgo = document.createElement('span');
+    wrapRiesgo.className = 'tooltip-wrap';
     
     var insignia = document.createElement('span');
     insignia.className = 'badge ' + claseRiesgo(p.riesgo);
     insignia.textContent = 'Riesgo ' + p.riesgo;
     
+    var iconoRiesgo = document.createElement('span');
+    iconoRiesgo.className = 'tooltip-icon';
+    iconoRiesgo.textContent = '\u24D8';
+    
+    var tooltipRiesgo = document.createElement('span');
+    tooltipRiesgo.className = 'tooltip-text';
+    tooltipRiesgo.textContent = 'El riesgo se calcula segun tus horas de uso diario en redes sociales';
+    
+    wrapRiesgo.appendChild(insignia);
+    wrapRiesgo.appendChild(iconoRiesgo);
+    wrapRiesgo.appendChild(tooltipRiesgo);
+    
     if (p.riesgo === 'Muy Alto') {
       var iconoAlarma = document.createElement('span');
       iconoAlarma.className = 'alarm-icon';
       iconoAlarma.textContent = '\uD83D\uDD14';
-      insignia.appendChild(iconoAlarma);
+      wrapRiesgo.appendChild(iconoAlarma);
     }
+    
+    // Tooltip envolvente para perfil
+    var wrapPerfil = document.createElement('span');
+    wrapPerfil.className = 'tooltip-wrap';
     
     var tipoPerfil = document.createElement('span');
     tipoPerfil.className = 'perfil-type';
     tipoPerfil.textContent = p.perfil;
     
-    clasificacion.appendChild(insignia);
-    clasificacion.appendChild(tipoPerfil);
+    var iconoPerfil = document.createElement('span');
+    iconoPerfil.className = 'tooltip-icon';
+    iconoPerfil.textContent = '\u24D8';
+    
+    var tooltipPerfil = document.createElement('span');
+    tooltipPerfil.className = 'tooltip-text';
+    tooltipPerfil.textContent = 'Categoria segun tu nivel de exposicion digital';
+    
+    wrapPerfil.appendChild(tipoPerfil);
+    wrapPerfil.appendChild(iconoPerfil);
+    wrapPerfil.appendChild(tooltipPerfil);
+    
+    clasificacion.appendChild(wrapRiesgo);
+    clasificacion.appendChild(wrapPerfil);
     
     // Recomendación personalizada
     var recomendacion = document.createElement('p');
     recomendacion.className = 'res-rec';
     recomendacion.textContent = obtenerRecomendacion(p.riesgo);
     
-    // Mensaje de confirmación
-    var mensajeGuardado = document.createElement('span');
-    mensajeGuardado.className = 'save-ok';
-    mensajeGuardado.textContent = 'Perfil guardado correctamente';
-    
     divResultado.appendChild(encabezado);
     divResultado.appendChild(metricas);
     divResultado.appendChild(seccionExp);
     divResultado.appendChild(clasificacion);
     divResultado.appendChild(recomendacion);
-    divResultado.appendChild(mensajeGuardado);
     
     secResultado.classList.remove('hidden');
+    
+    // Notificacion toast
+    mostrarToast('Perfil guardado correctamente', 'success');
+    
+    // Confetti si el riesgo es bajo
+    if (p.riesgo === 'Bajo') {
+      setTimeout(function() { lanzarConfetti(); }, 500);
+    }
   }
   
   // ============================================
@@ -715,9 +797,9 @@
     return {
       nombre: sanitizar(inpNombre.value),
       correo: sanitizar(inpCorreo.value),
-      edad: parseInt(inpEdad.value, 10),
+      edad: inpEdad.value,
       redSocial: sanitizar(inpRed.value),
-      horas: parseFloat(inpHoras.value)
+      horas: inpHoras.value
     };
   }
   
@@ -733,6 +815,22 @@
     for (var i = 0; i < campos.length; i++) {
       var elemento = document.getElementById(campos[i]);
       if (elemento) elemento.classList.remove('has-ok', 'has-error');
+    }
+    // Resetear custom select
+    var custom = document.querySelector('.custom-select');
+    if (custom) {
+      custom.classList.remove('has-ok', 'has-error');
+      var texto = custom.querySelector('.custom-select-text');
+      var placeholder = custom.querySelector('.custom-select-placeholder');
+      if (texto && placeholder) {
+        texto.textContent = placeholder.textContent;
+        texto.classList.add('placeholder');
+        var previas = custom.querySelectorAll('[aria-selected="true"]');
+        for (var k = 0; k < previas.length; k++) {
+          previas[k].setAttribute('aria-selected', 'false');
+        }
+        placeholder.setAttribute('aria-selected', 'true');
+      }
     }
   }
   
@@ -773,8 +871,9 @@
     // Simular procesamiento con pequeña demora
     setTimeout(function() {
       // Calcular métricas de exposición
-      var exposicion = calcularExposicion(datos.horas);
-      var nivelRiesgo = calcularRiesgo(datos.horas);
+      var horasNum = parseFloat(datos.horas);
+      var exposicion = calcularExposicion(horasNum);
+      var nivelRiesgo = calcularRiesgo(horasNum);
       var tipoPerfil = calcularPerfil(nivelRiesgo);
       
       // Crear objeto de perfil
@@ -782,9 +881,9 @@
         id: generarId(),
         nombre: datos.nombre,
         correo: datos.correo,
-        edad: datos.edad,
+        edad: parseInt(datos.edad, 10),
         redSocial: datos.redSocial,
-        horas: datos.horas,
+        horas: horasNum,
         exposicion: Math.round(exposicion),
         riesgo: nivelRiesgo,
         perfil: tipoPerfil,
@@ -929,6 +1028,32 @@
   }
   
   // ============================================
+  // MÓDULO: CONFETTI PARA RIESGO BAJO
+  // ============================================
+  // Asistido por GitHub Copilot: Efecto de confetti con particulas de colores y animacion de caida
+  function lanzarConfetti() {
+    var colores = ['#10b981', '#34d399', '#14b8a6', '#6366f1', '#a78bfa', '#6ee7b7'];
+    for (var i = 0; i < 60; i++) {
+      (function() {
+        var particula = document.createElement('div');
+        particula.className = 'confeti';
+        particula.style.left = Math.random() * 100 + '%';
+        particula.style.background = colores[Math.floor(Math.random() * colores.length)];
+        particula.style.width = (Math.random() * 8 + 4) + 'px';
+        particula.style.height = (Math.random() * 8 + 4) + 'px';
+        particula.style.borderRadius = Math.random() > 0.5 ? '50%' : '2px';
+        particula.style.animation = 'caerConfeti ' + (Math.random() * 2 + 2).toFixed(1) + 's ease-in forwards';
+        particula.style.animationDelay = (Math.random() * 1.5).toFixed(1) + 's';
+        document.body.appendChild(particula);
+        
+        setTimeout(function() {
+          if (particula.parentNode) particula.parentNode.removeChild(particula);
+        }, 4500);
+      })();
+    }
+  }
+  
+  // ============================================
   // MÓDULO: ANIMACIONES REVEAL AL HACER SCROLL
   // ============================================
   function observarReveal() {
@@ -1039,9 +1164,10 @@
   // ============================================
   // MÓDULO: CARRUSEL TYPEWRITER
   // ============================================
-  // Asistido por GitHub Copilot: Efecto de máquina de escribir con frases rotativas
+  // Asistido por GitHub Copilot: Efecto de maquina de escribir con transicion glitch y caracteres aleatorios
   function iniciarMaquinaEscribir() {
     var elemento = document.getElementById('maquinaEscribir');
+    var typewriterWrap = elemento ? elemento.parentElement : null;
     if (!elemento) return;
 
     var frases = [
@@ -1054,38 +1180,319 @@
 
     var indice = 0;
     var indiceChar = 0;
-    var borrando = false;
     var velocidad = 60;
 
     elemento.classList.add('typing');
 
+    function randomChar() {
+      var chars = '!@#$%&?/+*=' + 'ABCDEFGHIJKLMNOPQRSTUVWXYZ' + 'abcdefghijklmnopqrstuvwxyz' + '01010101';
+      return chars[Math.floor(Math.random() * chars.length)];
+    }
+
+    function glitchChars(texto) {
+      if (typewriterWrap) typewriterWrap.setAttribute('aria-live', 'off');
+      var arr = texto.split('');
+      var pasos = 5;
+      var contador = 0;
+
+      var t = setInterval(function() {
+        contador++;
+        for (var i = 0; i < arr.length; i++) {
+          if (Math.random() > 0.35) {
+            arr[i] = randomChar();
+          }
+        }
+        elemento.textContent = arr.join('');
+        if (contador >= pasos) clearInterval(t);
+      }, 70);
+    }
+
     function escribir() {
       var actual = frases[indice];
+      
+      indiceChar++;
+      elemento.textContent = actual.substring(0, indiceChar);
 
-      if (!borrando) {
-        indiceChar++;
-        elemento.textContent = actual.substring(0, indiceChar);
-
-        if (indiceChar === actual.length) {
-          setTimeout(function() { borrando = true; escribir(); }, 2500);
-          return;
-        }
-      } else {
-        indiceChar--;
-        elemento.textContent = actual.substring(0, indiceChar);
-
-        if (indiceChar === 0) {
-          borrando = false;
-          indice = (indice + 1) % frases.length;
-          setTimeout(escribir, 400);
-          return;
-        }
+      if (indiceChar === actual.length) {
+        setTimeout(function() {
+          elemento.classList.remove('typing');
+          elemento.classList.add('glitching');
+          glitchChars(actual);
+          
+          setTimeout(function() {
+            if (typewriterWrap) typewriterWrap.setAttribute('aria-live', 'polite');
+            indice = (indice + 1) % frases.length;
+            indiceChar = 0;
+            elemento.textContent = '';
+            elemento.classList.remove('glitching');
+            elemento.classList.add('typing');
+            setTimeout(escribir, 300);
+          }, 500);
+        }, 2500);
+        return;
       }
 
-      setTimeout(escribir, borrando ? velocidad * 0.5 : velocidad);
+      setTimeout(escribir, velocidad);
     }
 
     setTimeout(escribir, 1800);
+  }
+
+  // ============================================
+  // MÓDULO: SEGUIMIENTO DE MOUSE EN HERO
+  // ============================================
+  // Asistido por GitHub Copilot: Seguimiento sutil del cursor en el titulo con transicion suave
+  function iniciarSeguimientoMouse() {
+    var heroSection = document.querySelector('.hero');
+    var heroTitle = document.querySelector('.hero-title');
+    if (!heroSection || !heroTitle) return;
+
+    var inner = document.createElement('span');
+    inner.className = 'hero-title-inner';
+    inner.textContent = heroTitle.textContent;
+    heroTitle.textContent = '';
+    heroTitle.appendChild(inner);
+
+    var factor = 0.012;
+
+    heroSection.addEventListener('mousemove', function(e) {
+      var rect = heroSection.getBoundingClientRect();
+      var centerX = rect.left + rect.width / 2;
+      var centerY = rect.top + rect.height / 2;
+      var diffX = (e.clientX - centerX) * factor;
+      var diffY = (e.clientY - centerY) * factor;
+      inner.style.transform = 'translate(' + diffX + 'px, ' + diffY + 'px)';
+    });
+
+    heroSection.addEventListener('mouseleave', function() {
+      inner.style.transform = 'translate(0, 0)';
+    });
+  }
+
+  // ============================================
+  // MÓDULO: ANIMACIÓN DE ENTRADA DE LETRAS
+  // ============================================
+  // Asistido por GitHub Copilot: Letras que vuelan desde direcciones aleatorias al cargar la pagina
+  function animarEntradaLetras() {
+    var inner = document.querySelector('.hero-title-inner');
+    if (!inner) return;
+
+    var texto = inner.textContent;
+    var letras = texto.split('');
+
+    inner.textContent = '';
+
+    for (var i = 0; i < letras.length; i++) {
+      (function(indice) {
+        var span = document.createElement('span');
+        span.className = 'hero-title-letter';
+        span.textContent = letras[indice] === ' ' ? '\u00A0' : letras[indice];
+
+        var angulo = Math.random() * Math.PI * 2;
+        var distancia = 40 + Math.random() * 60;
+        var x = Math.cos(angulo) * distancia;
+        var y = Math.sin(angulo) * distancia;
+
+        span.style.transform = 'translate(' + x + 'px, ' + y + 'px) scale(0.5)';
+        span.style.transitionDelay = (indice * 0.03) + 's';
+
+        inner.appendChild(span);
+      })(i);
+    }
+
+    requestAnimationFrame(function() {
+      requestAnimationFrame(function() {
+        var spans = inner.children;
+        for (var i = 0; i < spans.length; i++) {
+          spans[i].style.transform = 'translate(0, 0) scale(1)';
+        }
+      });
+    });
+  }
+
+  // ============================================
+  // MÓDULO: CUSTOM SELECT
+  // ============================================
+  // IA: Custom select — reemplaza <select> nativo con dropdown animado + ARIA.
+  // Sincroniza con select oculto para mantener validación existente intacta.
+  function iniciarSelectPersonalizado() {
+    var contenedor = document.querySelector('.custom-select');
+    if (!contenedor) return;
+
+    var nombreCampo = contenedor.getAttribute('data-field');
+    var selectNat = document.getElementById(nombreCampo);
+    var trigger = contenedor.querySelector('.custom-select-trigger');
+    var texto = contenedor.querySelector('.custom-select-text');
+    var opciones = contenedor.querySelector('.custom-select-options');
+    var abierto = false;
+
+    function abrir() {
+      if (abierto) return;
+      abierto = true;
+      contenedor.classList.add('open');
+      trigger.setAttribute('aria-expanded', 'true');
+    }
+
+    function cerrar() {
+      if (!abierto) return;
+      abierto = false;
+      contenedor.classList.remove('open');
+      trigger.setAttribute('aria-expanded', 'false');
+    }
+
+    function toggle() {
+      if (abierto) cerrar(); else abrir();
+    }
+
+    function seleccionar(opcion) {
+      if (!opcion) return;
+      var valor = opcion.getAttribute('data-value');
+      var label = opcion.textContent;
+
+      // Quitar selección previa
+      var previas = opciones.querySelectorAll('[aria-selected="true"]');
+      for (var i = 0; i < previas.length; i++) {
+        previas[i].setAttribute('aria-selected', 'false');
+      }
+
+      opcion.setAttribute('aria-selected', 'true');
+      texto.textContent = label;
+      texto.classList.toggle('placeholder', valor === '');
+
+      // Sincronizar con el select nativo
+      selectNat.value = valor;
+      var evt = document.createEvent('Event');
+      evt.initEvent('change', true, true);
+      selectNat.dispatchEvent(evt);
+
+      // Feedback visual ok
+      contenedor.classList.remove('has-error');
+      if (valor) contenedor.classList.add('has-ok');
+      else contenedor.classList.remove('has-ok');
+    }
+
+    // Evento: clic en trigger
+    trigger.addEventListener('click', function(e) {
+      e.stopPropagation();
+      toggle();
+    });
+
+    // Evento: clic en opción
+    var items = opciones.querySelectorAll('.custom-select-option');
+    for (var i = 0; i < items.length; i++) {
+      items[i].addEventListener('click', function() {
+        seleccionar(this);
+        cerrar();
+        trigger.focus();
+      });
+    }
+
+    // Evento: clic fuera → cerrar
+    document.addEventListener('click', function(e) {
+      if (!contenedor.contains(e.target)) cerrar();
+    });
+
+    // Evento: teclas
+    trigger.addEventListener('keydown', function(e) {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        toggle();
+      }
+      if (e.key === 'Escape') cerrar();
+      if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
+        e.preventDefault();
+        if (!abierto) { abrir(); return; }
+        var actual = opciones.querySelector('[aria-selected="true"]');
+        if (!actual) return;
+        var vecinos = Array.prototype.slice.call(items);
+        var idx = vecinos.indexOf(actual);
+        var sig = (e.key === 'ArrowDown') ? idx + 1 : idx - 1;
+        if (sig >= 0 && sig < vecinos.length) {
+          seleccionar(vecinos[sig]);
+          vecinos[sig].scrollIntoView({ block: 'nearest' });
+        }
+      }
+    });
+
+    // Limpiar errores al enfocar
+    trigger.addEventListener('focus', function() { limpiarError(nombreCampo); });
+
+    // Inicializar texto desde valor nativo
+    if (selectNat.value) {
+      for (var j = 0; j < items.length; j++) {
+        if (items[j].getAttribute('data-value') === selectNat.value) {
+          seleccionar(items[j]);
+          break;
+        }
+      }
+    }
+  }
+
+  // ============================================
+  // MÓDULO: BÚSQUEDA EN TIEMPO REAL
+  // ============================================
+  // IA: Filtro de perfiles en tiempo real con debounce — busca en nickname, red social o riesgo
+  function iniciarBusquedaPerfiles() {
+    var input = document.getElementById('buscadorPerfiles');
+    var wrap = document.getElementById('searchBarWrap');
+    if (!input || !wrap) return;
+
+    function toggleBarra() {
+      wrap.classList.toggle('visible', perfiles.length >= 1);
+    }
+
+    function filtrar() {
+      var termino = input.value.toLowerCase().trim();
+      var tarjetas = divTarjetas.querySelectorAll('.pcard');
+      var visibles = 0;
+
+      for (var i = 0; i < tarjetas.length; i++) {
+        var t = tarjetas[i];
+        var texto = t.textContent.toLowerCase();
+        if (!termino || texto.indexOf(termino) !== -1) {
+          t.style.display = '';
+          visibles++;
+        } else {
+          t.style.display = 'none';
+        }
+      }
+
+      var sinResultados = document.getElementById('sinResultados');
+      if (visibles === 0 && tarjetas.length > 0) {
+        if (!sinResultados) {
+          sinResultados = document.createElement('p');
+          sinResultados.id = 'sinResultados';
+          sinResultados.className = 'empty-msg';
+          var icono = document.createElement('span');
+          icono.className = 'empty-state-icon';
+          icono.setAttribute('aria-hidden', 'true');
+          icono.textContent = '\uD83D\uDD0D';
+          var texto = document.createElement('span');
+          texto.className = 'empty-state-text';
+          texto.textContent = 'Ning\u00FAn perfil coincide con tu b\u00FAsqueda';
+          sinResultados.appendChild(icono);
+          sinResultados.appendChild(texto);
+          divTarjetas.parentNode.insertBefore(sinResultados, divTarjetas.nextSibling);
+        }
+        sinResultados.style.display = '';
+      } else if (sinResultados) {
+        sinResultados.style.display = 'none';
+      }
+    }
+
+    input.addEventListener('input', debounce(filtrar, 200));
+
+    // Vincular toggleBarra a mostrarTarjetas
+    var originalMostrar = mostrarTarjetas;
+    mostrarTarjetas = function() {
+      originalMostrar();
+      toggleBarra();
+      if (perfiles.length === 0) input.value = '';
+      var sinResultados = document.getElementById('sinResultados');
+      if (sinResultados) sinResultados.style.display = 'none';
+    };
+
+    toggleBarra();
   }
 
   // ============================================
@@ -1113,5 +1520,10 @@
   iniciarProgresoScroll();
   iniciarEfectoOnda();
   iniciarMaquinaEscribir();
+  iniciarSeguimientoMouse();
+  animarEntradaLetras();
+  // IA: Custom select con animación, teclado y accesibilidad
+  iniciarSelectPersonalizado();
+  iniciarBusquedaPerfiles();
   cargar();
 })();
